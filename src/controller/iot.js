@@ -62,7 +62,7 @@ exports.post = ('/', async (req, res, next) => {
         
             await iot.save()
                 console.log(iot)
-        res.json(iot)
+        res.send(iot)
     } catch (e) {
         console.log({ error: e })
         res.send({ error: e })
