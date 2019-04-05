@@ -103,8 +103,4 @@ const iot = new Schema({
 //     ....
 
 //
-
-
-mongoose.model('iot', iot);
-
-module.exports = iot;
+module.exports = mongoose.model('iot', iot);
