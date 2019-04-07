@@ -6,8 +6,9 @@ exports.post = ('/', async (req, res, next) => {
     // tempo real
     try {
         // TODO: get request modify
-    
-        res.status(200).send({"k":"k"})
+        let sensor = req.body.sensor
+        console.log(req.body)
+        res.status(200).send({"k": req.body})
         return;
         sensor.noise_pollution = "";
         sensor.toxic_gases = {
