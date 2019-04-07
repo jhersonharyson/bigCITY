@@ -7,8 +7,8 @@ exports.post = ('/', async (req, res, next) => {
     try {
         // TODO: get request modify
         let sensor = req.body.sensor
-        console.log(req.body.sensor)
-        res.status(200).send(req.body.sensor)
+        console.log(req.body)
+        res.status(200).send(JSON.parse(req.body))
         return;
         sensor.noise_pollution = "";
         sensor.toxic_gases = {
