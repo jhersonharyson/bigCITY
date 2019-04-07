@@ -5,6 +5,7 @@ const index =  (req, res, next)=> {
         version: '1.0.0',
         status: 'OK'
     }
+    console.log("GET status ok")
     res.send(response)
 }
 module.exports = index;

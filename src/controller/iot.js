@@ -1,18 +1,20 @@
 const axios = require('axios')
 const constrants = require('./../bin/constants')
 const Iot = require('../models/iot')
-exports.post = ('/', async (req, res, next) => {
+exports.post = ('/', async (req, res, next) => {    
     // recuperar dados 
     // tempo real
     try {
         // TODO: get request modify
         let sensor = req.body.sensor
+        console.log(req.body.sensor)
         sensor.noise_pollution = "";
         sensor.toxic_gases = {
             co: "",
             smoke: "",
             lta: "",
         };
+        
         
         // TODO: get request
         // const geolocation = req.body.geolocation
@@ -60,8 +62,8 @@ exports.post = ('/', async (req, res, next) => {
             flowSegmentData
         });
         
-            await iot.save()
-                console.log(iot)
+        await iot.save()
+        console.log(iot)
         res.send(iot)
     } catch (e) {
         console.log({ error: e })
@@ -92,3 +94,9 @@ exports.post = ('/', async (req, res, next) => {
     // salvar no banco
     // res.send({ ok: "ok" })
 })
+
+exports.get = (req, res, next) => {
+    console.log("ok");
+    
+    res.send({ok:"ok"})
+}
