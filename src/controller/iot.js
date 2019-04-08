@@ -6,38 +6,31 @@ exports.post = ('/', async (req, res, next) => {
     // tempo real
     try {
         // TODO: get request modify
-        let sensor = req.body.sensor
-        console.log(req.body)
-        res.status(200).send({"k": req.body})
-        return;
-        sensor.noise_pollution = "";
-        sensor.toxic_gases = {
-            co: "",
-            smoke: "",
-            lta: "",
-        };
-        
-        
+        //res.status(200).send({"received": req.body})
         // TODO: get request
         // const geolocation = req.body.geolocation
         ///// TODO: remove 
-        const lat = req.body.lat//'52.41072'
+        const {lat, log, speed, sensor} = req.body
         ///// TODO: remove
-        const log = req.body.lon//'4.84239'
+        //const lat = req.body.lat//'52.41072'
+        //const log = req.body.log//'4.84239'
         const data = new Date()
         console.log(data)
+        
         const wheater = await axios.get(constrants.current_weather)
+        
         const name = wheater.data.name
         const state = wheater.data.state
         const country = wheater.data.country
         const current_weather = wheater.data.data
+        
         const flowData = await axios.get(constrants.flow_segment.replace(':LAT', lat).replace(':LOG', log))
+        
         const { frc,
             currentSpeed,
             freeFlowSpeed,
             currentTravelTime,
-            freeFlowTravelTime,
-               
+            freeFlowTravelTime,       
             confidence } = flowData.data.flowSegmentData
             
         const flowSegmentData = {
@@ -48,15 +41,15 @@ exports.post = ('/', async (req, res, next) => {
             freeFlowTravelTime,
             confidence
         }
-
-
+        
         const iot = new Iot({
             state,
             name,
             country,
             geolocation: {
                 lat,
-                log
+                log,
+                speed
             },
             data,
             sensor,
@@ -67,6 +60,7 @@ exports.post = ('/', async (req, res, next) => {
         await iot.save()
         console.log(iot)
         res.send(iot)
+        console.log("saved!")
     } catch (e) {
         console.log({ error: e })
         res.send({ error: e })

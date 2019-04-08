@@ -9,7 +9,8 @@ const iot = new Schema({
     country: String,
     geolocation: {
         lat: Number,
-        lon: Number
+        log: Number,
+        speed: Number
     },
     data: {
         type: Date,
@@ -22,7 +23,7 @@ const iot = new Schema({
         toxic_gases:{
             co: Number,
             smoke: Number,
-            lta: Number,
+            lpg: Number,
         }
     },
     current_weather: {
