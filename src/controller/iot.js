@@ -41,7 +41,7 @@ exports.post = ('/', async (req, res, next) => {
             freeFlowTravelTime,
             confidence
         }
-        
+
         const iot = new Iot({
             state,
             name,
@@ -91,8 +91,12 @@ exports.post = ('/', async (req, res, next) => {
     // res.send({ ok: "ok" })
 })
 
-exports.get = (req, res, next) => {
+exports.test = (req, res, next) => {
     console.log("ok");
-    
     res.send({ok:"ok"})
+}
+
+exports.get = async (req, res, next) => {
+    const data = await Iot.find({});
+    res.send(data);
 }
