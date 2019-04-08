@@ -9,7 +9,7 @@ const iot = new Schema({
     country: String,
     geolocation: {
         lat: Number,
-        log: Number,
+        lon: Number,
         speed: Number
     },
     data: {

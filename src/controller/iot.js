@@ -10,7 +10,7 @@ exports.post = ('/', async (req, res, next) => {
         // TODO: get request
         // const geolocation = req.body.geolocation
         ///// TODO: remove 
-        const {lat, log, speed, sensor} = req.body
+        const {lat, lon, speed, sensor} = req.body
         ///// TODO: remove
         //const lat = req.body.lat//'52.41072'
         //const log = req.body.log//'4.84239'
@@ -48,7 +48,7 @@ exports.post = ('/', async (req, res, next) => {
             country,
             geolocation: {
                 lat,
-                log,
+                lon,
                 speed
             },
             data,
