@@ -24,7 +24,7 @@ exports.post = ('/', async (req, res, next) => {
         const country = wheater.data.country
         const current_weather = wheater.data.data
         
-        const flowData = await axios.get(constrants.flow_segment.replace(':LAT', lat).replace(':LOG', log))
+        const flowData = await axios.get(constrants.flow_segment.replace(':LAT', lat).replace(':LOG', lon))
         
         const { frc,
             currentSpeed,
