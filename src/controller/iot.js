@@ -63,6 +63,6 @@ exports.test = (req, res, next) => {
 }
 
 exports.get = async (req, res, next) => {
-    const data = await Iot.find({});
+    const data = await Iot.find({}).sort({data: 1});
     res.send(data);
 }
