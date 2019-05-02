@@ -3,21 +3,31 @@ const Iot = require("../models/iot");
 exports.get = async (req, res, next) => {
   const sample = await Iot.find()
     .sort([["data", "descending"]])
-    .limit(5);
-
+    .limit(Number(req.params.limit || 200));
+  console.log(req.params.limit);
   // todo normalizar
-  let temp = await sample.map(data => {
-    return Number(data.sensor.temperature || temp_min[0].sensor.temperature);
+  const temp = await sample.map(data => {
+    return Number(data.sensor.temperature || sample[0].sensor.temperature);
   });
 
   const temp_min = Math.min(...temp);
   const temp_max = Math.max(...temp);
 
   function rule_3(value, min, max, min_, max_) {
-    return ((value - min) / (max - min)) * (max_ - min_) + min_;
+    return parseInt(
+      1 + (((value - min) / (max - min)) * (max_ - min_) + min_) / 10
+    );
   }
 
-  res.send({ temp, r3: temp.map(t => rule_3(t, temp_min, temp_max, 0, 100)) });
+  const temperature = sample.map((data, i) => {
+    return {
+      lat: data.geolocation.lat || 0,
+      lng: data.geolocation.lon || 0,
+      count: rule_3(temp[i], temp_min, temp_max, 0, 100)
+    };
+  });
+
+  res.send(temperature);
 };
 
 exports.mean_analytics = async (req, res, next) => {
