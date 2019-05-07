@@ -30,6 +30,52 @@ exports.get = async (req, res, next) => {
   res.send(temperature);
 };
 
+exports.getData = async (req, res, next) => {
+  try {
+    const sample = await Iot.find()
+      .sort([["data", "descending"]])
+      .limit(Number(req.params.limit || 200));
+    // todo normalizar
+    const dt = await sample.map(data => {
+      if (["temperature", "humidity"].indexOf(req.params.data) > -1)
+        return Number(
+          data.sensor[req.params.data] || sample[0].sensor[req.params.data]
+        );
+      else if (["co", "smoke", "lpg"].indexOf(req.params.data) > -1)
+        return Number(
+          data.sensor.toxic_gases[req.params.data] ||
+            sample[0].sensor.toxic_gases[req.params.data]
+        );
+      else if (["temperature_", "humidity_"].indexOf(req.params.data) > -1)
+        return Number(
+          data.current_weather[req.params.data.replace("_", "")] ||
+            sample[0].current_weather[req.params.data.replace("_", "")]
+        );
+    });
+
+    const dt_min = Math.min(...dt);
+    const dt_max = Math.max(...dt);
+
+    function rule_3(value, min, max, min_, max_) {
+      return parseInt(
+        1 + (((value - min) / (max - min)) * (max_ - min_) + min_) / 10
+      );
+    }
+
+    const send = sample.map((data, i) => {
+      return {
+        lat: data.geolocation.lat || 0,
+        lng: data.geolocation.lon || 0,
+        count: rule_3(dt[i], dt_min, dt_max, 0, 100)
+      };
+    });
+
+    res.send(send);
+  } catch (e) {
+    res.status(403).send(e);
+  }
+};
+
 exports.mean_analytics = async (req, res, next) => {
   const iots = await Iot.find();
 
